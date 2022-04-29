@@ -4,7 +4,8 @@
   "description": "![poster](./poster.png) # Inge Bra Bygg AB **Ärende och kommunikationsplattform mellan byggare och kunder för byggfirman Inge Bra Bygg AB.**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "express": "^4.18.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.1",
+    "nodemon": "^2.0.15",
     "socket.io": "^4.5.0"
   }
 }
