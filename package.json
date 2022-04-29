@@ -4,6 +4,7 @@
   "description": "![poster](./poster.png) # Inge Bra Bygg AB **Ärende och kommunikationsplattform mellan byggare och kunder för byggfirman Inge Bra Bygg AB.**",
   "main": "index.js",
   "scripts": {
+    "seed": "node database/seeder.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
   },
@@ -19,7 +20,7 @@
   },
   "homepage": "https://github.com/anna-arlig/Inge-Bra-Bygg-AB#readme",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.0",
     "express": "^4.18.0",
     "jsonwebtoken": "^8.5.1",
