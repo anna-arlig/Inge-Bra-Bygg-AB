@@ -3,7 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 5500;
 const connectMongoDB = require("./database/connection");
 const routes = require("./routes");
-const logger = require('.middlewares/logger')
+const logger = require('./middlewares/logger')
 
 app.use(logger)
 app.use("api/user", routes.user);
