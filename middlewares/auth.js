@@ -7,7 +7,7 @@ try{
   const token = req.header('Authorization').replace('Bearer ', '')
   const admin = jwt.verify(token, JWT_SECRET)
   if(admin.role != "admin"){
-    console.log("Unauthorized!")
+    console.log("Unauthorized!", admin)
     throw new Error("User is not admin!")
   }
   req.user = admin

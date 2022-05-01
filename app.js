@@ -6,6 +6,7 @@ const routes = require("./routes");
 const logger = require('./middlewares/logger')
 
 app.use(logger)
+app.use(express.json())
 app.use("/api/user", routes.user);
 app.use("/api/tasks", routes.tasks);
 
