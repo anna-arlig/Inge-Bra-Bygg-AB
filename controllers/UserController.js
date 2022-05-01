@@ -12,7 +12,7 @@ module.exports = {
         createUser: async (req, res) => {
             const {email, name, password, role} = req.body
             const {zipCode, street, city} = req.body.address
-            const user = await User.create({email,name,password,role,zipCode,street,city})
+            const user = await User.create({email,name,password,role, address: {zipCode,street,city}})
             res.json({
                 message: "User created!",
                 user: {id:user.id,email,name, role, address:{city,street,zipCode}}
@@ -32,5 +32,15 @@ module.exports = {
         all: async(req, res) => {
             const users = await User.find({})
             res.json({users})
+        },
+
+        update: async (req, res) => {
+            const {city, street, zipCode} = req.body
+            const user = await User.findById(req.params.id)
+            console.log(city, street, zipCode)
+            await user.updateOne({address:{city, street, zipCode}})
+
+            res.json( {message: "User updated"})
         }
+
 }

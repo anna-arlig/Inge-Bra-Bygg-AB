@@ -19,7 +19,7 @@ user.get("/find/:id", Auth.admin, UserController.getById);
 user.post("/create", Auth.admin, UserController.createUser);
 
 // Update profile / Admin only
-user.patch("/update/:id", Auth.admin);
+user.patch("/update/:id", Auth.loggedin, UserController.update);
 
 // Delete User / Admin only
 user.delete("/delete/:id", Auth.admin);
