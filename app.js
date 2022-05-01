@@ -9,7 +9,6 @@ app.use(logger)
 app.use(express.json())
 app.use("/api/user", routes.user);
 app.use("/api/tasks", routes.tasks);
-
 app.use("api/tasks", routes.notFound);
 
 connectMongoDB().then(() => {

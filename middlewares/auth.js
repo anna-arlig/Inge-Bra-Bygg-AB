@@ -64,13 +64,19 @@ try{
       }
     },
 
-
-
     async loggedin(req, res, next) {
       try{
-
+        const token = req.header('Authorization').replace('Bearer ', '')
+        const user = jwt.verify(token, JWT_SECRET)
+        if(user.role == null){
+          console.log("Not logged in!")
+          throw new Error("User is not logged in!")
+        }
+        req.user = user
+        next()
       }catch(error){
-
+        res.status(401)
+        .send({ error: 'Not logged in' })
       }
     },
   };

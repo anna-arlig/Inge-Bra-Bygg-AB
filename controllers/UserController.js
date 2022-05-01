@@ -19,13 +19,18 @@ module.exports = {
             })
         },
 
-        me: async (req, res) => {
+        getById: async (req, res) => {
+            const user = await User.findById(req.params.id)
+            res.json(user)
+        },
 
+        me: async (req, res) => {
+            const {name,email,role} = req.user
+            res.json({name,email,role})
         },
 
         all: async(req, res) => {
             const users = await User.find({})
             res.json({users})
         }
-
 }

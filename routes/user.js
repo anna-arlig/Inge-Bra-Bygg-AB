@@ -7,13 +7,13 @@ const Auth = require('../middlewares/auth')
 user.post("/auth", UserController.auth)
 
 // Get My profile Info
-user.get("/me", UserController.me);
+user.get("/me", Auth.loggedin, UserController.me);
 
 // Get all users
 user.get("/all", UserController.all)
 
 // Get specific User Info
-user.get("/find/:id", Auth.admin);
+user.get("/find/:id", Auth.admin, UserController.getById);
 
 //Create New User / Admin only
 user.post("/create", Auth.admin, UserController.createUser);
