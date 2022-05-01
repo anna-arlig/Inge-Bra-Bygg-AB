@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const tasks = new Router();
 const Auth = require('../middlewares/auth')
+const TaskController = require('../controllers/TaskController')
 
 // Admin
 // Get All Tasks
-tasks.get("/all", Auth.admin);
+tasks.get("/all", TaskController.all);
 // Get Specific Task
 tasks.get("/:id", Auth.admin);
 // Delete Task

@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Task } = require("../models");
 const connectMongoDB = require("../database/connection");
 async function CreateUsers() {
   connectMongoDB()
@@ -69,3 +69,36 @@ async function CreateUsers() {
     });
 }
 CreateUsers();
+
+
+async function CreateTasks() {
+  connectMongoDB()
+    .then(() => {
+      Task.remove({}, () => {
+        console.log("All tasks removed! :(");
+      });
+    })
+    .then(() => {
+      Task.create(
+        {
+          title: "Build fence",
+          desciption: "Client wants a white fence with nice flowers!",
+          clientId: "626eac210c3fb11ec17a42ee",
+        },
+        {
+          title: "Renovate ceiling",
+          desciption: "The ceiling should be green with yellow ribbons.",
+          clientId: "626eb0e546ff8cfffea32049",
+        },
+        {
+          title: "Paint kitchen",
+          desciption: "New kitchen color is hotpink.",
+          clientId: "626eb0e546ff8cfffea32049",
+        },
+
+      );
+      console.log("Tasks bulk is created :)");
+    });
+}
+CreateTasks();
+
