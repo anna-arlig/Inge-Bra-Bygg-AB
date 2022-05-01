@@ -37,10 +37,14 @@ module.exports = {
         update: async (req, res) => {
             const {city, street, zipCode} = req.body
             const user = await User.findById(req.params.id)
-            console.log(city, street, zipCode)
             await user.updateOne({address:{city, street, zipCode}})
-
             res.json( {message: "User updated"})
+        },
+
+        delete: async (req,res) => {
+            const user = await User.findById(req.params.id)
+            await user.delete({_id: user._id})
+            res.json( {message: "User deleted"})
         }
 
 }

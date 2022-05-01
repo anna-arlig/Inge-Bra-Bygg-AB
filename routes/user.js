@@ -22,6 +22,6 @@ user.post("/create", Auth.admin, UserController.createUser);
 user.patch("/update/:id", Auth.loggedin, UserController.update);
 
 // Delete User / Admin only
-user.delete("/delete/:id", Auth.admin);
+user.delete("/delete/:id", Auth.admin, UserController.delete);
 
 module.exports = user;
