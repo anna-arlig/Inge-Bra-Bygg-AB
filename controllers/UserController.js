@@ -71,8 +71,7 @@ module.exports = {
 
   update: async (req, res) => {
     const { city, street, zipCode } = req.body;
-    const user = await User.findById(req.params.id);
-    await user.updateOne({ address: { city, street, zipCode } });
+    await User.updateOne({_id:req.params.id},{ address: { city, street, zipCode } });
     res.json({ message: "User updated" });
   },
 
