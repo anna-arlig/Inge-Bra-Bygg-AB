@@ -1,16 +1,16 @@
 const { Router } = require("express");
 const UserController = require("../controllers/UserController");
 const user = new Router();
-const Auth = require('../middlewares/auth')
+const Auth = require("../middlewares/auth");
 
 //Get token
-user.post("/auth", UserController.auth)
+user.post("/auth", UserController.auth);
 
 // Get My profile Info
 user.get("/me", Auth.loggedin, UserController.me);
 
 // Get all users
-user.get("/all", UserController.all)
+user.get("/all", Auth.admin, UserController.all);
 
 // Get specific User Info
 user.get("/find/:id", Auth.admin, UserController.getById);

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const tasks = new Router();
-const Auth = require('../middlewares/auth')
-const TaskController = require('../controllers/TaskController')
+const Auth = require("../middlewares/auth");
+const TaskController = require("../controllers/TaskController");
 
 // Admin
 // Get All Tasks
@@ -22,13 +22,12 @@ tasks.post("/:id/messages", Auth.workerClient);
 tasks.get("/:id/messages", Auth.workerClient);
 
 // Client
-// Get Client Tasks / Admin
+// Get Tasks' clients / Admin
 tasks.get("/client/:id", Auth.admin);
 
 //All
-tasks.get("/allmytasks")
+tasks.get("/allmytasks");
 
 module.exports = tasks;
-
 
 // tasks.post("/create/:id/img", Auth.worker);
