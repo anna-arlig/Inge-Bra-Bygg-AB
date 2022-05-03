@@ -13,6 +13,7 @@ app.use(logger);
 app.use(express.json());
 app.use("/api/user", routes.user);
 app.use("/api/tasks", routes.tasks);
+app.use("/api/messages", routes.messages);
 app.use(errorHandler);
 app.use(routes.notFound);
 
