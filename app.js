@@ -10,6 +10,7 @@ const { PORT } = require("./config");
 
 app.use(cors());
 app.use(logger);
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/user", routes.user);
 app.use("/api/tasks", routes.tasks);

@@ -7,13 +7,13 @@ const {
   InvalidCredentials,
 } = require("../errors");
 module.exports = {
-  auth: async (req, res) => {
+  auth: async (req, res, next) => {
     try {
       console.log("body info: ", req.body);
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
-        throw new Error();
+        throw new UserNotFound();
       }
       console.log("user from database: ", user);
       const isMatch = await user.validatePassword(password);
@@ -22,10 +22,11 @@ module.exports = {
         const token = Token.createToken(user.email, user.name, user.role);
         res.json({ token });
       } else {
-        throw new Error();
+        throw new InvalidCredentials();
       }
     } catch (error) {
-      res.status(403).json({ error: "Login failed" });
+      //   res.status(403).json({ error: "Login failed" });
+      next(error);
     }
   },
 
@@ -71,7 +72,10 @@ module.exports = {
 
   update: async (req, res) => {
     const { city, street, zipCode } = req.body;
-    await User.updateOne({_id:req.params.id},{ address: { city, street, zipCode } });
+    await User.updateOne(
+      { _id: req.params.id },
+      { address: { city, street, zipCode } }
+    );
     res.json({ message: "User updated" });
   },
 
