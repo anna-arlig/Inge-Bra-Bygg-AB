@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const MessageSchema = require("./Message");
+const {MessageSchema} = require("./Message");
 const TaskSchema = new mongoose.Schema(
   {
     title: {
