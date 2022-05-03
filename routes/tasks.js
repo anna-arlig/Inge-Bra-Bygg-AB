@@ -20,12 +20,6 @@ tasks.patch("/update/:id", Auth.worker, TaskController.updateTask);
 tasks.patch("/done/:id", Auth.worker, TaskController.markAsDone);
 //Mark Task as undone
 tasks.patch("/undone/:id", Auth.worker, TaskController.markAsUndone);
-// Send Message / Worker, Client
-tasks.post("/:id/sendmessage", Auth.workerClient);
-// Get Specific Task Messages / Worker, Client
-tasks.get("/:id/messages", Auth.workerClient);
-// Update message /Worker, client
-tasks.patch("/:id/message/:id")
 
 // Client
 // Get Tasks' clients / Admin

@@ -19,7 +19,12 @@ module.exports = {
       const isMatch = await user.validatePassword(password);
       console.log("isMatch value form user method validatepassword; ", isMatch);
       if (isMatch) {
-        const token = Token.createToken(user.email, user.name, user.role);
+        const token = Token.createToken(
+          user.email,
+          user.name,
+          user.role,
+          user._id
+        );
         res.json({ token });
       } else {
         throw new InvalidCredentials();
@@ -59,10 +64,8 @@ module.exports = {
 
   me: async (req, res) => {
     const { email } = req.user;
-    const user = await User.findOne({ email });
-    console.log(user);
-    // delete user.password;
-    res.json({ ...user._doc, password: null });
+    const user = await User.findOne({ email }).select("-password");
+    res.json(user);
   },
 
   all: async (req, res) => {
