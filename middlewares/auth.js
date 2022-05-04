@@ -1,5 +1,10 @@
 const { JWT_SECRET } = require("../config");
-const { TokenExpired, Unauthorized, Forbidden } = require("../errors");
+const {
+  TokenExpired,
+  Unauthorized,
+  Forbidden,
+  MessageNotFound,
+} = require("../errors");
 const jwt = require("jsonwebtoken");
 const Task = require("../models/Task");
 
@@ -86,7 +91,11 @@ module.exports = {
       const taskId = req.params.id;
       console.log("My message authentication: ", taskId, req.user, messageId);
       const task = await Task.findById(taskId);
+      console.log("the Task:", task);
       const theMessage = task.messages.find((msg) => msg._id == messageId);
+      if (!theMessage) {
+        throw new MessageNotFound(messageId);
+      }
       console.log("the message: ", theMessage);
       if (theMessage.userId != userId) {
         throw new Forbidden();

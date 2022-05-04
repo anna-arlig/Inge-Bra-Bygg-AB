@@ -70,12 +70,21 @@ class UserNotFound extends CustomError {
   }
 }
 
+class MessageNotFound extends CustomError {
+  constructor(id) {
+    super();
+    this.message = `Message with id ${id} not found`;
+    this.errorCode = 404;
+  }
+}
+
 module.exports = {
   CustomError,
   InvalidCredentials,
   Unauthorized,
   TokenExpired,
   TaskNotFound,
+  MessageNotFound,
   Forbidden,
   MissingHeader,
   UserNotFound,

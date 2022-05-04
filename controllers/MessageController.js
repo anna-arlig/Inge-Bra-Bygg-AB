@@ -9,8 +9,6 @@ module.exports = {
         content: req.body.content,
         userId: req.user.id,
       };
-      console.log("add new message:", newMessage);
-      //"626eb5be81442f2d164219af"
       const task = await Task.findOneAndUpdate(
         {
           _id: req.params.id,
@@ -26,9 +24,9 @@ module.exports = {
   updateMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
-      console.log("task from database:", task);
-      const msg = task.messages.id(req.params.messageId);
+      const msg = await task.messages.id(req.params.messageId);
       msg.content = req.body.content;
+      await task.save();
       res.json({ message: "message updated" });
     } catch (error) {
       next(error);
@@ -37,11 +35,14 @@ module.exports = {
   deleteMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
-      task.messages.id(_id).remove();
-      task.save(() => {
-        if (err) throw new Error();
-        res.json({ message: "message removed" });
-      });
+      await task.messages.id(req.params.messageId).remove();
+      await task.save();
+      res.json({ message: "message removed" });
+      //  await task.save(function (err) {
+      //    if (err) return Error(err);
+      //    console.log("the subdocs were removed");
+      //    res.json({ message: "message removed" });
+      //  });
     } catch (error) {
       next(error);
     }
