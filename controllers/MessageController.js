@@ -34,4 +34,16 @@ module.exports = {
       next(error);
     }
   },
+  deleteMessage: async (req, res) => {
+    try {
+      const task = await Task.findById(req.params.id);
+      task.messages.id(_id).remove();
+      task.save(() => {
+        if (err) throw new Error();
+        res.json({ message: "message removed" });
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 };

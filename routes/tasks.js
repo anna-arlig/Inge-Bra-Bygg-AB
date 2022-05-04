@@ -5,9 +5,9 @@ const TaskController = require("../controllers/TaskController");
 
 // Admin
 // Get All Tasks
-tasks.get("/all", TaskController.all);
+tasks.get("/all", Auth.admin, TaskController.all);
 // Get Specific Task
-tasks.get("/:id", Auth.admin, TaskController.getById);
+tasks.get("/getById/:id", Auth.admin, TaskController.getById);
 // Delete Task
 tasks.delete("/delete/:id", Auth.admin, TaskController.delete);
 
@@ -21,12 +21,12 @@ tasks.patch("/done/:id", Auth.worker, TaskController.markAsDone);
 //Mark Task as undone
 tasks.patch("/undone/:id", Auth.worker, TaskController.markAsUndone);
 
+//All
+tasks.get("/client/allmytasks", Auth.client, TaskController.allClientTasks);
+tasks.get("/worker/allmytasks", Auth.worker, TaskController.allWorkerTasks);
 // Client
 // Get Tasks' clients / Admin
-tasks.get("/client/:id", Auth.admin);
-
-//All
-tasks.get("/allmytasks");
+// tasks.get("/:id/clients", Auth.admin);
 
 module.exports = tasks;
 

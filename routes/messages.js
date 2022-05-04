@@ -19,4 +19,10 @@ messages.patch(
   Auth.myMessage,
   MessageController.updateMessage
 );
+messages.patch(
+  "/:id/updateMessage/:messageId",
+  Auth.workerClient,
+  Auth.myMessage,
+  MessageController.deleteMessage
+);
 module.exports = messages;
