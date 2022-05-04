@@ -91,6 +91,7 @@ module.exports = {
       if (theMessage.userId != userId) {
         throw new Forbidden();
       }
+      next()
     } catch (error) {
       next(error);
     }
