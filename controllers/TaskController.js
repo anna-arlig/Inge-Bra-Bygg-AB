@@ -19,10 +19,10 @@ module.exports = {
   },
   //Fix validation (clientId is client, workerID is worker)
   createTask: async (req, res) => {
-    const { title, desciption, imgPath, clientId, workersID } = req.body;
+    const { title, description, imgPath, clientId, workersID } = req.body;
     const task = await Task.create({
       title,
-      desciption,
+      description,
       imgPath,
       clientId,
       workersID,
@@ -32,7 +32,7 @@ module.exports = {
       task: {
         id: task.id,
         title,
-        desciption,
+        description,
         imgPath,
         clientId,
         workersID,
@@ -40,10 +40,10 @@ module.exports = {
     });
   },
   updateTask: async (req, res) => {
-    const { title, desciption, imgPath, clientId, workersID } = req.body;
+    const { title, description, imgPath, clientId, workersID } = req.body;
     await Task.updateOne(
       { _id: req.params.id },
-      { title, desciption, imgPath, clientId, workersID }
+      { title, description, imgPath, clientId, workersID }
     );
     res.json("Task updated!");
   },
@@ -74,25 +74,18 @@ module.exports = {
       next(error);
     }
   },
-  allClientTasks: async (req, res) => {
+  allTasks: async (req, res) => {
     try {
       console.log("clientId: ", req.user.id);
-      const myTasks = await Task.find({ clientId: req.user.id });
+      let myTasks = [];
+      if (req.user.role == "client") {
+        myTasks = await Task.find({ clientId: req.user.id });
+      } else {
+        myTasks = await Task.find({ workersID: req.user.id });
+      }
       res.json({ myTasks });
     } catch (error) {
       next(error);
     }
-  },
-  allWorkerTasks: async (req, res) => {
-    // Get All User Tasks
-    console.log("getting user task:");
-    // try {
-    //   const myTasks = await Task.find({ clientId: req.user.id });
-    //   res.json({ tasks: myTasks });
-    // } catch (error) {
-    //   next(error);
-    // }
-    res.json({ message: "in all my tasks controller" });
-    // Get All Worker Tasks
   },
 };

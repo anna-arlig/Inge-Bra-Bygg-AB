@@ -19,8 +19,8 @@ messages.patch(
   Auth.myMessage,
   MessageController.updateMessage
 );
-messages.patch(
-  "/:id/updateMessage/:messageId",
+messages.delete(
+  "/:id/deleteMessage/:messageId",
   Auth.workerClient,
   Auth.myMessage,
   MessageController.deleteMessage

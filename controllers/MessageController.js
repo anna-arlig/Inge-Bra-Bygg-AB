@@ -23,7 +23,7 @@ module.exports = {
       next(error);
     }
   },
-  updateMessage: async (req, res) => {
+  updateMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
       console.log("task from database:", task);
@@ -34,7 +34,7 @@ module.exports = {
       next(error);
     }
   },
-  deleteMessage: async (req, res) => {
+  deleteMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
       task.messages.id(_id).remove();
