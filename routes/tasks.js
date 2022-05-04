@@ -2,6 +2,8 @@ const { Router } = require("express");
 const tasks = new Router();
 const Auth = require("../middlewares/auth");
 const TaskController = require("../controllers/TaskController");
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 // Admin
 // Get All Tasks
@@ -20,6 +22,10 @@ tasks.patch("/update/:id", Auth.worker, TaskController.updateTask);
 tasks.patch("/done/:id", Auth.worker, TaskController.markAsDone);
 //Mark Task as undone
 tasks.patch("/undone/:id", Auth.worker, TaskController.markAsUndone);
+//Upload img to Task
+tasks.post("/upload/:id/img", Auth.worker, upload.single('taskImg'), TaskController.uploadImg);
+//Get tasks
+tasks.get("/:id/getImg/", Auth.loggedin, TaskController.getImg)
 
 // Client
 // Get Tasks' clients / Admin
@@ -30,4 +36,4 @@ tasks.get("/allmytasks");
 
 module.exports = tasks;
 
-// tasks.post("/create/:id/img", Auth.worker);
+
