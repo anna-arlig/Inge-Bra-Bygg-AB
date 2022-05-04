@@ -66,10 +66,12 @@ module.exports = {
       next(error);
     }
   },
+
+  //Sends back imgPath as string
   getImg: async (req, res, next) => {
     try {
-      const image = await Task.findOne({ _id: req.params.id });
-      res.json({ image });
+      const task = await Task.findOne({ _id: req.params.id });
+      res.send( task.imgPath );
     } catch (error) {
       next(error);
     }
