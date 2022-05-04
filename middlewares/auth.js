@@ -38,7 +38,6 @@ module.exports = {
     try {
       const token = req.header("Authorization").replace("Bearer ", "");
       const worker = jwt.verify(token, JWT_SECRET);
-      console.log("den här koden körs");
       if (worker.role != "worker") {
         console.log("User is not worker!", worker);
         throw new Unauthorized();

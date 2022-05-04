@@ -1,6 +1,6 @@
 const Task = require("../models/Task");
 const Token = require("../utils/token");
-const { TaskNotFound, InvalidFile, FileExists } = require("../errors");
+const { TaskNotFound, InvalidFile } = require("../errors");
 
 module.exports = {
   all: async (req, res) => {
@@ -55,7 +55,25 @@ module.exports = {
     await Task.updateOne({ _id: req.params.id }, { done: false });
     res.json("Task is marked as undone!");
   },
-
+  uploadImg: async (req, res, next) => {
+    try {
+      if (!req.file.mimetype.startsWith("image/")) {
+        throw new InvalidFile("File must be image!");
+      }
+      await Task.updateOne({ _id: req.params.id }, { imgPath: req.file.path });
+      res.json("File uploaded!");
+    } catch (error) {
+      next(error);
+    }
+  },
+  getImg: async (req, res, next) => {
+    try {
+      const image = await Task.findOne({ _id: req.params.id });
+      res.json({ image });
+    } catch (error) {
+      next(error);
+    }
+  },
   allClientTasks: async (req, res) => {
     try {
       console.log("clientId: ", req.user.id);
