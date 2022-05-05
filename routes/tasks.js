@@ -27,7 +27,7 @@ tasks.post(
   upload.single("taskImg"),
   TaskController.uploadImg
 );
-//Get Images from Task
+//Get Image from Task
 tasks.get("/getImg/:id/", Auth.loggedin, TaskController.getImg);
 
 // Get All Tasks
