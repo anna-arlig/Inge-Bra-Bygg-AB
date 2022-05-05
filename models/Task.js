@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const MessageSchema = require("./Message");
+const {MessageSchema} = require("./Message");
 const TaskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
     },
-    desciption: {
+    description: {
       type: String,
       required: true,
     },

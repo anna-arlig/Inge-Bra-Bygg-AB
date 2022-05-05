@@ -1,76 +1,110 @@
 const { JWT_SECRET } = require("../config");
-const jwt = require('jsonwebtoken')
+const {
+  TokenExpired,
+  Unauthorized,
+  Forbidden,
+  MessageNotFound,
+} = require("../errors");
+const jwt = require("jsonwebtoken");
+const Task = require("../models/Task");
 
 module.exports = {
-    async admin(req, res, next) {
-try{
-  const token = req.header('Authorization').replace('Bearer ', '')
-  const admin = jwt.verify(token, JWT_SECRET)
-  if(admin.role != "admin"){
-    console.log("Unauthorized!")
-    throw new Error("User is not admin!")
-  }
-  req.user = admin
-  next()
-}catch (error){
-  res.status(401)
-  .send({ error: 'Unauthorized' })
-}
-},
-
-    async client(req, res, next) {
-      try{
-        const token = req.header('Authorization').replace('Bearer ', '')
-        const client = jwt.verify(token, JWT_SECRET)
-        if(client.role != "client"){
-          console.log("Unauthorized!")
-          throw new Error("User is not client!")
-        }
-        req.user = client
-        next()
-      }catch(error){
-        res.status(401)
-        .send({ error: 'Unauthorized' })
+  async admin(req, res, next) {
+    console.log("req params :", req.params.id);
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const admin = jwt.verify(token, JWT_SECRET);
+      if (admin.role != "admin") {
+        console.log("User is not admin!", admin);
+        throw new Unauthorized();
       }
-    },
-    async worker(req, res, next) {
-      try{
-        const token = req.header('Authorization').replace('Bearer ', '')
-        const worker = jwt.verify(token, JWT_SECRET)
-        if(worker.role != "worker"){
-          console.log("Unauthorized!")
-          throw new Error("User is not worker!")
-        }
-        req.user = worker
-        next()
-      }catch(error){
-        res.status(401)
-        .send({ error: 'Unauthorized' })
+      req.user = admin;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async client(req, res, next) {
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const client = jwt.verify(token, JWT_SECRET);
+      if (client.role != "client") {
+        console.log("User is not client!", client);
+        throw new Unauthorized();
       }
-    },
-    async workerClient(req, res, next) {
-      try{
-        const token = req.header('Authorization').replace('Bearer ', '')
-        const user = jwt.verify(token, JWT_SECRET)
-        if(user.role != "worker" || user.role != "client"){
-          console.log("Unauthorized!")
-          throw new Error("User is not authorized!")
-        }
-        req.user = user
-        next()
-      }catch(error){
-        res.status(401)
-        .send({ error: 'Unauthorized' })
+      req.user = client;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+  async worker(req, res, next) {
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const worker = jwt.verify(token, JWT_SECRET);
+      if (worker.role != "worker") {
+        console.log("User is not worker!", worker);
+        throw new Unauthorized();
       }
-    },
-
-
-
-    async loggedin(req, res, next) {
-      try{
-
-      }catch(error){
-
+      req.user = worker;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+  async workerClient(req, res, next) {
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const user = jwt.verify(token, JWT_SECRET);
+      if (user.role == "worker" || user.role == "client") {
+        req.user = user;
+      } else {
+        console.log("user is neither worker nor client: ", user);
+        throw new Unauthorized();
       }
-    },
-  };
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async loggedin(req, res, next) {
+    try {
+      const headerToken = req.header("Authorization");
+      if (!headerToken) throw new Error();
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const user = jwt.verify(token, JWT_SECRET);
+      if (!user) {
+        console.log("Not logged in!");
+        throw new Error();
+      }
+      req.user = user;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async myMessage(req, res, next) {
+    try {
+      const userId = req.user.id;
+      const messageId = req.params.messageId;
+      const taskId = req.params.id;
+      console.log("My message authentication: ", taskId, req.user, messageId);
+      const task = await Task.findById(taskId);
+      console.log("the Task:", task);
+      const theMessage = task.messages.find((msg) => msg._id == messageId);
+      if (!theMessage) {
+        throw new MessageNotFound(messageId);
+      }
+      console.log("the message: ", theMessage);
+      if (theMessage.userId != userId) {
+        throw new Forbidden();
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+};

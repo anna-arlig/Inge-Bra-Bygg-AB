@@ -1,19 +1,26 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 5500;
+const { errorHandler } = require("./errors/errorHandler");
+
 const connectMongoDB = require("./database/connection");
 const routes = require("./routes");
-const logger = require('./middlewares/logger')
+const logger = require("./middlewares/logger");
+const { PORT } = require("./config");
 
-app.use(logger)
-app.use("api/user", routes.user);
-app.use("api/tasks", routes.tasks);
+app.use(cors());
+app.use(logger);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use("/api/user", routes.user);
+app.use("/api/tasks", routes.tasks);
+app.use("/api/task", routes.messages);
+app.use(errorHandler);
+app.use(routes.notFound);
 
-
-app.use("api/tasks", routes.notFound);
-
+const port = PORT || 5000;
 connectMongoDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(port, () => {
     console.log(`Server listening on port ${PORT}`);
   });
 });
