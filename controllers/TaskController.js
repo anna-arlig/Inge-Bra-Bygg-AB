@@ -3,10 +3,6 @@ const Token = require("../utils/token");
 const { TaskNotFound, InvalidFile } = require("../errors");
 
 module.exports = {
-  all: async (req, res) => {
-    const tasks = await Task.find({});
-    res.json({ tasks });
-  },
   getById: async (req, res) => {
     const task = await Task.findById(req.params.id);
     res.json(task);
@@ -71,21 +67,23 @@ module.exports = {
   getImg: async (req, res, next) => {
     try {
       const task = await Task.findOne({ _id: req.params.id });
-      res.send( task.imgPath );
+      res.send(task.imgPath);
     } catch (error) {
       next(error);
     }
   },
-  allTasks: async (req, res) => {
+
+  allTasks: async (req, res, next) => {
+    const { id, role } = req.user;
+    const searchQuery =
+      role === "client"
+        ? { clientId: id }
+        : role === "worker"
+        ? { workersID: id }
+        : {};
     try {
-      console.log("clientId: ", req.user.id);
-      let myTasks = [];
-      if (req.user.role == "client") {
-        myTasks = await Task.find({ clientId: req.user.id });
-      } else {
-        myTasks = await Task.find({ workersID: req.user.id });
-      }
-      res.json({ myTasks });
+      tasks = await Task.find(searchQuery);
+      res.json({ tasks });
     } catch (error) {
       next(error);
     }

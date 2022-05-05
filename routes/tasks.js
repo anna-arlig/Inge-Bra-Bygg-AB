@@ -6,8 +6,6 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
 // Admin
-// Get All Tasks
-tasks.get("/all", Auth.admin, TaskController.all);
 // Get Specific Task
 tasks.get("/getById/:id", Auth.admin, TaskController.getById);
 // Delete Task
@@ -32,8 +30,9 @@ tasks.post(
 //Get Images from Task
 tasks.get("/getImg/:id/", Auth.loggedin, TaskController.getImg);
 
-//All Tasks
-tasks.get("/allmytasks", Auth.workerClient, TaskController.allTasks);
+// Get All Tasks
+tasks.get("/allTasks", Auth.loggedin, TaskController.allTasks);
+
 // Client
 // Get Tasks' clients / Admin
 // tasks.get("/:id/clients", Auth.admin);

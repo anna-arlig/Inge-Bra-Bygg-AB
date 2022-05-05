@@ -71,6 +71,8 @@ module.exports = {
 
   async loggedin(req, res, next) {
     try {
+      const headerToken = req.header("Authorization");
+      if (!headerToken) throw new Error();
       const token = req.header("Authorization").replace("Bearer ", "");
       const user = jwt.verify(token, JWT_SECRET);
       if (!user) {
