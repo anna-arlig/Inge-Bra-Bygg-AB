@@ -1,6 +1,5 @@
-const express = require("express");
+const { express, app, server } = require("./sockets/server");
 const cors = require("cors");
-const app = express();
 const { errorHandler } = require("./errors/errorHandler");
 
 const connectMongoDB = require("./database/connection");
@@ -20,7 +19,7 @@ app.use(routes.notFound);
 
 const port = PORT || 5000;
 connectMongoDB().then(() => {
-  app.listen(port, () => {
+  server.listen(port, () => {
     console.log(`Server listening on port ${PORT}`);
   });
 });
