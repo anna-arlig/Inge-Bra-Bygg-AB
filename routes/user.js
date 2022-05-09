@@ -10,7 +10,7 @@ user.post("/auth", UserController.auth);
 user.get("/me", Auth.loggedin, UserController.me);
 
 // Get all users
-user.get("/all", Auth.admin, UserController.all);
+user.get("/all", Auth.adminWorker, UserController.all);
 
 // Get specific User Info
 user.get("/find/:id", Auth.admin, UserController.getById);
