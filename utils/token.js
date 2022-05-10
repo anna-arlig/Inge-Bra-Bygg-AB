@@ -11,4 +11,5 @@ const createToken = (email, name, role, id) => {
   return token;
 };
 
+
 module.exports = { createToken };

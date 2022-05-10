@@ -22,6 +22,14 @@ class Forbidden extends CustomError {
   }
 }
 
+class HackerAttempt extends CustomError {
+  constructor() {
+    super();
+    this.message = `Don't try this again`;
+    this.errorCode = 451;
+  }
+}
+
 class TokenExpired extends CustomError {
   constructor() {
     super();
@@ -90,4 +98,5 @@ module.exports = {
   UserNotFound,
   InvalidFile,
   FileExists,
+  HackerAttempt
 };
