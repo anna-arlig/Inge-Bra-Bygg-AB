@@ -14,12 +14,16 @@ tasks.delete("/delete/:id", Auth.verifyToken, Auth.admin, TaskController.delete)
 // Worker
 // Create new Task
 tasks.post("/create", Auth.verifyToken, Auth.worker, TaskController.createTask);
+
 // Update Tasks
 tasks.patch("/update/:id", Auth.verifyToken, Auth.worker, TaskController.updateTask);
+
 //Mark Task as done
 tasks.patch("/done/:id", Auth.verifyToken, Auth.worker, TaskController.markAsDone);
+
 //Mark Task as undone
 tasks.patch("/undone/:id", Auth.verifyToken, Auth.worker, TaskController.markAsUndone);
+
 //Upload img to Task
 tasks.post(
   "/upload/:id/img",Auth.verifyToken,
@@ -27,6 +31,7 @@ tasks.post(
   upload.single("taskImg"),
   TaskController.uploadImg
 );
+
 //Get Image from Task
 tasks.get("/getImg/:id/", Auth.verifyToken, TaskController.getImg);
 

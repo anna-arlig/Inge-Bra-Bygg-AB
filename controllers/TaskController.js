@@ -9,7 +9,6 @@ module.exports = {
   },
   delete: async (req, res) => {
     const task = await Task.findById(req.params.id);
-    console.log("task to be deleted:", task);
     await task.delete({ _id: task._id });
     res.json({ message: "Task deleted" });
   },
