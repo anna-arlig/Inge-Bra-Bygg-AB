@@ -10,7 +10,9 @@ user.post("/auth", UserController.auth);
 user.get("/me", Auth.verifyToken, UserController.me);
 
 // Get all users
+
 user.get("/all", Auth.verifyToken, Auth.admin, UserController.all);
+
 
 // Get specific User Info
 user.get("/find/:id", Auth.verifyToken, Auth.admin, UserController.getById);

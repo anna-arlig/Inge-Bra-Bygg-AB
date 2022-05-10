@@ -46,6 +46,20 @@ module.exports = {
     }
   },
 
+  async adminWorker(req, res, next) {
+    try {
+      const token = req.header("Authorization").replace("Bearer ", "");
+      const admin = jwt.verify(token, JWT_SECRET);
+      if (admin.role == "client") {
+        console.log("User is not admin!", admin);
+        throw new Unauthorized();
+      }
+      req.user = admin;
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
   async client(req, res, next) {
     try {
       const user = req.user
