@@ -10,7 +10,6 @@ user.post("/auth", UserController.auth);
 user.get("/me", Auth.verifyToken, UserController.me);
 
 // Get all users
-
 user.get("/all", Auth.verifyToken, Auth.admin, UserController.all);
 
 
@@ -21,7 +20,7 @@ user.get("/find/:id", Auth.verifyToken, Auth.admin, UserController.getById);
 user.post("/create", Auth.verifyToken, Auth.admin, UserController.createUser);
 
 // Update profile / Admin only
-user.patch("/update/:id", Auth.verifyToken, UserController.update);
+user.patch("/update/:id", Auth.verifyToken, Auth.admin, UserController.update);
 
 // Delete User / Admin only
 user.delete("/delete/:id", Auth.verifyToken, Auth.admin, UserController.delete);

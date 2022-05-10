@@ -11,12 +11,13 @@ const MessageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    seenBy: {
+      type: Array, default: []
+    },
   },
   {
     timestamps: true,
   }
 );
-
-const Message = mongoose.model("Message", MessageSchema);
 
 module.exports = {MessageSchema, Message}
