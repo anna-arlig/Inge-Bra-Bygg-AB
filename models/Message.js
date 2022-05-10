@@ -12,7 +12,8 @@ const MessageSchema = new mongoose.Schema(
       required: true,
     },
     seenBy: {
-      type: Array, default: []
+      type: Array,
+      default: [],
     },
   },
   {
@@ -20,4 +21,4 @@ const MessageSchema = new mongoose.Schema(
   }
 );
 
-module.exports = {MessageSchema, Message}
+module.exports = { MessageSchema };
