@@ -7,17 +7,18 @@ const {
   InvalidCredentials,
 } = require("../errors");
 module.exports = {
+  logout: async (req, res, next) => {
+
+  },
+
   auth: async (req, res, next) => {
     try {
-      console.log("body info: ", req.body);
       const { email, password } = req.body;
       const user = await User.findOne({ email });
       if (!user) {
         throw new UserNotFound();
       }
-      console.log("user from database: ", user);
       const isMatch = await user.validatePassword(password);
-      console.log("isMatch value form user method validatepassword; ", isMatch);
       if (isMatch) {
         const token = Token.createToken(
           user.email,

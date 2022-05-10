@@ -2,6 +2,7 @@ const { JWT_SECRET } = require("../config");
 const {
   TokenExpired,
   Unauthorized,
+  HackerAttempt,
   Forbidden,
   MessageNotFound,
 } = require("../errors");
@@ -9,16 +10,36 @@ const jwt = require("jsonwebtoken");
 const Task = require("../models/Task");
 
 module.exports = {
+
+  async verifyToken(req, res, next) {
+    try{
+      try{
+        const token = req.header("Authorization").replace("Bearer ", "");
+      const user = jwt.verify(token, JWT_SECRET);
+
+        req.user = user
+        next()}
+      catch(error){
+        console.log("error catched from json: ", error.message)
+        if(error.name == "JsonWebTokenError"){
+          throw new HackerAttempt()
+        }else if(error.name == "TokenExpiredError"){
+          throw new TokenExpired()
+        }else{
+          throw new Forbidden()
+        }
+      }
+    }
+    catch(error){
+      next(error)
+    }
+  },
   async admin(req, res, next) {
-    console.log("req params :", req.params.id);
     try {
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const admin = jwt.verify(token, JWT_SECRET);
-      if (admin.role != "admin") {
-        console.log("User is not admin!", admin);
+      const user = req.user
+      if (user.role != "admin") {
         throw new Unauthorized();
       }
-      req.user = admin;
       next();
     } catch (error) {
       next(error);
@@ -27,13 +48,10 @@ module.exports = {
 
   async client(req, res, next) {
     try {
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const client = jwt.verify(token, JWT_SECRET);
-      if (client.role != "client") {
-        console.log("User is not client!", client);
+      const user = req.user
+      if (user.role != "client") {
         throw new Unauthorized();
       }
-      req.user = client;
       next();
     } catch (error) {
       next(error);
@@ -41,13 +59,10 @@ module.exports = {
   },
   async worker(req, res, next) {
     try {
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const worker = jwt.verify(token, JWT_SECRET);
-      if (worker.role != "worker") {
-        console.log("User is not worker!", worker);
+      const user = req.user
+      if (user.role != "worker") {
         throw new Unauthorized();
       }
-      req.user = worker;
       next();
     } catch (error) {
       next(error);
@@ -55,31 +70,10 @@ module.exports = {
   },
   async workerClient(req, res, next) {
     try {
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const user = jwt.verify(token, JWT_SECRET);
-      if (user.role == "worker" || user.role == "client") {
-        req.user = user;
-      } else {
-        console.log("user is neither worker nor client: ", user);
+      const user = req.user
+      if (user.role == "admin") {
         throw new Unauthorized();
       }
-      next();
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async loggedin(req, res, next) {
-    try {
-      const headerToken = req.header("Authorization");
-      if (!headerToken) throw new Error();
-      const token = req.header("Authorization").replace("Bearer ", "");
-      const user = jwt.verify(token, JWT_SECRET);
-      if (!user) {
-        console.log("Not logged in!");
-        throw new Error();
-      }
-      req.user = user;
       next();
     } catch (error) {
       next(error);
@@ -100,7 +94,7 @@ module.exports = {
       }
       console.log("the message: ", theMessage);
       if (theMessage.userId != userId) {
-        throw new Forbidden();
+        throw new Unauthorized();
       }
       next();
     } catch (error) {
