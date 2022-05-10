@@ -1,20 +1,14 @@
 const express = require("express");
-const cors = require("cors");
-
+const app = express()
 const http = require("http");
-const { Server } = require("socket.io");
+const Task = require('../models/Task')
 const {
   userJoin,
   getCurrentUser,
   userLeave,
   getRoomUsers,
 } = require("./utilities/users");
-const app = express();
-app.use(cors());
-
 const server = http.createServer(app);
-
-// const io = new Server(server);
 
 const io = require("socket.io")(server, {
   cors: {
@@ -25,36 +19,51 @@ const io = require("socket.io")(server, {
   },
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("user connected");
-  socket.on("joinRoom", ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+  socket.on("joinRooms", ({ rooms, user }) => {
+    // const user = userJoin(socket.id, user.name, rooms);
 
-    socket.join(user.room);
+    socket.join(rooms);
 
-    // Welcome current user
-    socket.emit("message", formatMessage(botName, "Welcome to ChatCord!"));
+    // // Welcome current user
+    // socket.emit("message", formatMessage(botName, "Welcome to ChatCord!"));
 
-    // Broadcast when a user connects
-    socket.broadcast
-      .to(user.room)
-      .emit(
-        "message",
-        formatMessage(botName, `${user.username} has joined the chat`)
-      );
+    // // Broadcast when a user connects
+    // socket.broadcast
+    //   .to(user.room)
+    //   .emit(
+    //     "message",
+    //     formatMessage(botName, `${user.username} has joined the chat`)
+    //   );
 
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
-    });
+    // // Send users and room info
+    // io.to(user.room).emit("roomUsers", {
+    //   room: user.room,
+    //   users: getRoomUsers(user.room),
+    // });
   });
 
   // Listen for chatMessage
-  socket.on("chatMessage", (msg) => {
-    const user = getCurrentUser(socket.id);
+  socket.on("message", async ({ msg, user, room }) => {
+    const newMessage = {
+      content: msg,
+      userId: user._id,
+    };
+    const task = await Task.findOneAndUpdate(
+      {
+        _id: room,
+      },
+      { $push: { messages: newMessage } },
+      { safe: true, upsert: true, new: true }
+    );
 
-    io.to(user.room).emit("message", formatMessage(user.username, msg));
+    console.log(
+      "updated task from mongoose before emitting to frontend: ",
+      task
+    );
+    // io.emit('newMsg', room)
+    io.to(room).emit("message", task);
   });
 
   // Runs when client disconnects
@@ -76,4 +85,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { express, server, io, app };
+module.exports = {express, app, server, io}
