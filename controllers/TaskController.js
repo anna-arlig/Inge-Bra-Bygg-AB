@@ -3,16 +3,18 @@ const Token = require("../utils/token");
 const { TaskNotFound, InvalidFile } = require("../errors");
 
 module.exports = {
+
   getById: async (req, res) => {
     const task = await Task.findById(req.params.id);
     res.json(task);
   },
+
   delete: async (req, res) => {
     const task = await Task.findById(req.params.id);
     await task.delete({ _id: task._id });
     res.json({ message: "Task deleted" });
   },
-  //Fix validation (clientId is client, workerID is worker)
+
   createTask: async (req, res) => {
     const { title, description, imgPath, clientId, workersID } = req.body;
     const task = await Task.create({
@@ -34,6 +36,7 @@ module.exports = {
       },
     });
   },
+
   updateTask: async (req, res) => {
     const { title, description, imgPath, clientId, workersID } = req.body;
     await Task.updateOne(
@@ -42,14 +45,17 @@ module.exports = {
     );
     res.json("Task updated!");
   },
+
   markAsDone: async (req, res) => {
     await Task.updateOne({ _id: req.params.id }, { done: true });
     res.json("Task is marked as done!");
   },
+
   markAsUndone: async (req, res) => {
     await Task.updateOne({ _id: req.params.id }, { done: false });
     res.json("Task is marked as undone!");
   },
+
   uploadImg: async (req, res, next) => {
     try {
       if (!req.file.mimetype.startsWith("image/")) {

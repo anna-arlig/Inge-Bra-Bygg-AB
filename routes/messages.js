@@ -3,7 +3,7 @@ const messages = new Router();
 const Auth = require("../middlewares/auth");
 const MessageController = require("../controllers/MessageController");
 
-// messages.post("/sendMessage", Auth.workerClient, MessageController.sendMessage);
+
 // Send Message / Worker, Client
 messages.post(
   "/:id/sendmessage",
@@ -12,8 +12,10 @@ messages.post(
   Auth.myTask,
   MessageController.sendMessage
 );
+
 // Get Specific Task Messages / Worker, Client
 messages.get("/:id/messages", Auth.verifyToken, Auth.workerClient);
+
 // Update message /Worker, client
 messages.patch(
   "/:id/updateMessage/:messageId",
@@ -23,6 +25,7 @@ messages.patch(
   Auth.myMessage,
   MessageController.updateMessage
 );
+
 messages.delete(
   "/:id/deleteMessage/:messageId",
   Auth.verifyToken,
@@ -31,4 +34,5 @@ messages.delete(
   Auth.myMessage,
   MessageController.deleteMessage
 );
+
 module.exports = messages;

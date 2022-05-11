@@ -2,6 +2,7 @@ const Task = require("../models/Task");
 const { io } = require("../sockets/server");
 
 module.exports = {
+
   sendMessage: async (req, res, next) => {
     try {
       const newMessage = {
@@ -25,6 +26,7 @@ module.exports = {
       next(error);
     }
   },
+
   updateMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
@@ -36,17 +38,13 @@ module.exports = {
       next(error);
     }
   },
+
   deleteMessage: async (req, res, next) => {
     try {
       const task = await Task.findById(req.params.id);
       await task.messages.id(req.params.messageId).remove();
       await task.save();
       res.json({ message: "message removed" });
-      //  await task.save(function (err) {
-      //    if (err) return Error(err);
-      //    console.log("the subdocs were removed");
-      //    res.json({ message: "message removed" });
-      //  });
     } catch (error) {
       next(error);
     }

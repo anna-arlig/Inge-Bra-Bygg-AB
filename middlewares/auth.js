@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const Task = require("../models/Task");
 
 module.exports = {
+
   async verifyToken(req, res, next) {
     try {
       try {
@@ -32,6 +33,7 @@ module.exports = {
       next(error);
     }
   },
+
   async admin(req, res, next) {
     try {
       const user = req.user;
@@ -58,6 +60,7 @@ module.exports = {
       next(error);
     }
   },
+
   async client(req, res, next) {
     try {
       const user = req.user;
@@ -69,6 +72,7 @@ module.exports = {
       next(error);
     }
   },
+
   async worker(req, res, next) {
     try {
       const user = req.user;
@@ -80,6 +84,7 @@ module.exports = {
       next(error);
     }
   },
+
   async workerClient(req, res, next) {
     try {
       const user = req.user;
@@ -110,6 +115,7 @@ module.exports = {
       next(error);
     }
   },
+
   async updateMyTask(req, res, next) {
     try {
       const user = req.user;
@@ -123,6 +129,7 @@ module.exports = {
       next(error);
     }
   },
+
   async myTask(req, res, next) {
     try {
       const user = req.user;

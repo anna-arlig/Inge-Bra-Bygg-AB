@@ -60,8 +60,4 @@ tasks.get("/getImg/:id/", Auth.verifyToken, Auth.myTask, TaskController.getImg);
 // Get All Tasks
 tasks.get("/allTasks", Auth.verifyToken, TaskController.allTasks);
 
-// Client
-// Get Tasks' clients / Admin
-// tasks.get("/:id/clients", Auth.admin);
-
 module.exports = tasks;

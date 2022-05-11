@@ -7,9 +7,6 @@ const {
   InvalidCredentials,
 } = require("../errors");
 module.exports = {
-  logout: async (req, res, next) => {
-
-  },
 
   auth: async (req, res, next) => {
     try {
@@ -31,7 +28,6 @@ module.exports = {
         throw new InvalidCredentials();
       }
     } catch (error) {
-      //   res.status(403).json({ error: "Login failed" });
       next(error);
     }
   },
