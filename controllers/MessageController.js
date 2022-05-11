@@ -15,10 +15,10 @@ module.exports = {
         { $push: { messages: newMessage } },
         { safe: true, upsert: true, new: true }
       );
-      console.log(newMessage)
+      console.log(task)
       const sockets = await io.fetchSockets();
       for (const socket of sockets) {
-        socket.emit("message", newMessage);
+        socket.emit("message", task);
       }
       res.json({ message: "Message sent!", task });
     } catch (error) {
