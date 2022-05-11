@@ -1,24 +1,52 @@
-const mongoose = require("mongoose");
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../database/connection");
+const Admin = require("./Admin");
+const Client = require("./Client");
+const Task = require("./Task");
+const Worker = require("./Worker");
 
-const MessageSchema = new mongoose.Schema(
+class Message extends Model {}
+Message.init(
   {
-    content: {
-      type: String,
-      required: true,
+    content: { type: DataTypes.STRING, allowNull: false },
+    worker_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Worker,
+        key: "id",
+      },
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+    client_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Client,
+        key: "id",
+      },
     },
-    seenBy: {
-      type: Array,
-      default: [],
+    admin_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Admin,
+        key: "id",
+      },
+    },
+    task_id: {
+      Type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Task,
+        key: "id",
+      },
+    },
+    role: {
+      type: DataTypes.ENUM("admin", "worker", "client"),
+      allowNull: false,
     },
   },
-  {
-    timestamps: true,
-  }
+  { sequelize, timestamps: true }
 );
 
-module.exports = { MessageSchema };
+module.exports = Message;

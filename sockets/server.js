@@ -1,10 +1,7 @@
 const express = require("express");
-const app = express()
+const app = express();
 const http = require("http");
-const Task = require('../models/Task')
 const server = http.createServer(app);
-const MessageController = require('../controllers/MessageController')
-
 
 const io = require("socket.io")(server, {
   cors: {
@@ -22,15 +19,15 @@ io.on("connection", async (socket) => {
   });
 
   // Listen for chatMessage
-  socket.on("message", ( msg ) => {
-    console.log(msg)
+  socket.on("message", (msg) => {
+    console.log(msg);
     io.to(room).emit("message");
   });
 
   // Runs when client disconnects
   socket.on("disconnect", () => {
-  console.log('User disconnected!')
+    console.log("User disconnected!");
   });
 });
 
-module.exports = {express, app, server, io}
+module.exports = { express, app, server, io };

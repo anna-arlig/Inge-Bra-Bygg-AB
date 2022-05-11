@@ -1,34 +1,24 @@
-const mongoose = require("mongoose");
-const {MessageSchema} = require("./Message");
-const TaskSchema = new mongoose.Schema(
+const { Model, DataTypes } = require("sequelize");
+const sequelize = require("../database/connection");
+const Client = require("./Client");
+
+class Task extends Model {}
+Task.init(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    imgPath: {
-      type: String,
-      required: false,
-    },
-    clientId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
-    messages: [MessageSchema],
-
-    workersID: { type: Array, default: [] },
-
-    done: {
-      type: Boolean,
-      default: false,
+    title: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING, allowNull: false },
+    imgPath: { type: DataTypes.STRING, allowNull: true },
+    done: { type: DataTypes.BOOLEAN, defaultValue: false },
+    client_id: {
+      Type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Client,
+        key: "id",
+      },
     },
   },
-  { timestamps: true }
+  { sequelize, timestamps: true }
 );
 
-module.exports = mongoose.model("Task", TaskSchema);
+module.exports = Task;

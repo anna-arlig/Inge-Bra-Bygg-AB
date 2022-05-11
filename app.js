@@ -1,10 +1,10 @@
 const { errorHandler } = require("./errors/errorHandler");
-const connectMongoDB = require("./database/connection");
 const routes = require("./routes");
 const logger = require("./middlewares/logger");
+const sequelize = require("./database/connection");
 const { PORT } = require("./config");
 const cors = require("cors");
-const {express, app, server, io} = require('./sockets/server')
+const { express, app, server } = require("./sockets/server");
 
 app.use(cors());
 app.use(express.static("public"));
@@ -20,8 +20,15 @@ app.use(routes.notFound);
 app.use(errorHandler);
 
 const port = PORT || 5000;
-connectMongoDB().then(() => {
-  server.listen(port, () => {
-    console.log(`Server listening on port ${PORT}`);
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection to database has been established successfully.");
+    server.listen(port, () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
   });
-});

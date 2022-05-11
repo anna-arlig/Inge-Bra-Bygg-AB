@@ -1,11 +1,8 @@
-const mongoose = require("mongoose");
-const { MONGODB_URL } = require("../config");
+const Sequelize = require("sequelize");
 
-module.exports = async () => {
-  try {
-    await mongoose.connect(MONGODB_URL);
-    console.log("connected with monogdb");
-  } catch (error) {
-    console.log("error connecting with monogdb: ", error);
-  }
-};
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: "../db.db",
+});
+
+module.exports = sequelize;
