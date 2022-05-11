@@ -21,8 +21,4 @@ const MessageSchema = new mongoose.Schema(
   }
 );
 
-<<<<<<< HEAD
-module.exports = {MessageSchema}
-=======
 module.exports = { MessageSchema };
->>>>>>> 1cccea9dab0a639c49a7fd8203766801a351380f

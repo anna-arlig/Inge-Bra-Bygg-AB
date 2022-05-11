@@ -1,9 +1,8 @@
 const Task = require("../models/Task");
-const Token = require("../utils/token");
-const { Message } = require("../models/Message");
+const {io} = require("../sockets/server")
 
 module.exports = {
-  sendMessage: async (req, res) => {
+  sendMessage: async (req, res, next) => {
     try {
       const newMessage = {
         content: req.body.content,
@@ -14,9 +13,14 @@ module.exports = {
           _id: req.params.id,
         },
         { $push: { messages: newMessage } },
-        { safe: true, upsert: true }
+        { safe: true, upsert: true, new: true }
       );
-      res.json({ message: "Message sent!" });
+      console.log(newMessage)
+      const sockets = await io.fetchSockets();
+      for (const socket of sockets) {
+        socket.emit("message", newMessage);
+      }
+      res.json({ message: "Message sent!", task });
     } catch (error) {
       next(error);
     }

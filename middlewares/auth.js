@@ -115,7 +115,6 @@ module.exports = {
       const user = req.user;
       const taskId = req.params.id;
       const task = await Task.findOne({ _id: taskId, workersID: user.id });
-      console.log("update my task, task from database: ", task);
       if (!task) {
         throw new Forbidden();
       }
@@ -133,7 +132,6 @@ module.exports = {
           ? { workersID: user.id }
           : user.role == "client" && { clientId: user.id };
       const task = await Task.findOne({ _id: taskId, ...query });
-      console.log("task from database: ", task);
       if (!task) {
         throw new Forbidden();
       }
