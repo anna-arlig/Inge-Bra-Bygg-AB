@@ -10,8 +10,7 @@ user.post("/auth", UserController.auth);
 user.get("/me", Auth.verifyToken, UserController.me);
 
 // Get all users
-user.get("/all", Auth.verifyToken, Auth.admin, UserController.all);
-
+user.get("/all", Auth.verifyToken, Auth.adminWorker, UserController.all);
 
 // Get specific User Info
 user.get("/find/:id", Auth.verifyToken, Auth.admin, UserController.getById);
@@ -26,6 +25,6 @@ user.patch("/update/:id", Auth.verifyToken, Auth.admin, UserController.update);
 user.delete("/delete/:id", Auth.verifyToken, Auth.admin, UserController.delete);
 
 //Logout
-user.get("/logout", UserController.logout)
+user.get("/logout", UserController.logout);
 
 module.exports = user;

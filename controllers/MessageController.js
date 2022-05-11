@@ -1,5 +1,5 @@
 const Task = require("../models/Task");
-const {io} = require("../sockets/server")
+const { io } = require("../sockets/server");
 
 module.exports = {
   sendMessage: async (req, res, next) => {
@@ -15,8 +15,8 @@ module.exports = {
         { $push: { messages: newMessage } },
         { safe: true, upsert: true, new: true }
       );
-      console.log(task)
       const sockets = await io.fetchSockets();
+      console.log("fetching sockets: ", sockets);
       for (const socket of sockets) {
         socket.emit("message", task);
       }
