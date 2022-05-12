@@ -24,7 +24,7 @@ user.patch("/update/:id", Auth.verifyToken, Auth.admin, UserController.update);
 // Delete User / Admin only
 user.delete("/delete/:id", Auth.verifyToken, Auth.admin, UserController.delete);
 
-//Logout
-user.get("/logout", UserController.logout);
+// //Logout
+// user.get("/logout", UserController.logout);
 
 module.exports = user;

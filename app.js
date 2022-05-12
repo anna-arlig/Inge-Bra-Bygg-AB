@@ -7,11 +7,8 @@ const cors = require("cors");
 const {express, app, server, io} = require('./sockets/server')
 
 app.use(cors());
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
 app.use(logger);
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/user", routes.user);
 app.use("/api/tasks", routes.tasks);
