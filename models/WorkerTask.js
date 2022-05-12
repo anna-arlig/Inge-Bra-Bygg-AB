@@ -22,7 +22,7 @@ Worker_Task.init(
       },
     },
   },
-  { sequelize, timestamps: true }
+  { sequelize, timestamps: true, modelName: "WorkerTask" }
 );
 
 module.exports = Worker_Task;

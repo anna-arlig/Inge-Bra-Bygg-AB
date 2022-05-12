@@ -1,10 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
-const { UserNotFound, InvalidCredentials } = require("../errors");
 const sequelize = require("../database/connection");
-const bcrypt = require("bcryptjs");
-const SALT_WORK_FACTOR = 10;
 
-class Admin extends Model {
+class User extends Model {
   static async register(user) {
     const { name, password, email } = user;
     try {
@@ -30,7 +27,7 @@ class Admin extends Model {
   async updateCredentials(email, password) {}
 }
 
-Admin.init(
+User.init(
   {
     name: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -39,10 +36,16 @@ Admin.init(
     street: { type: DataTypes.STRING, allowNull: true },
     zipCode: { type: DataTypes.STRING, allowNull: true },
     imgPath: { type: DataTypes.STRING, allowNull: true },
+    role: {
+      type: DataTypes.STRING,
+      enum: ["client", "worker", "admin"],
+      defaultValue: "client",
+      allowNull: false,
+    },
   },
   {
     sequelize,
-    modelName: "Admin",
+    modelName: "User",
     hooks: {
       beforeCreate(instance, options) {
         if (instance.password) {
@@ -53,4 +56,4 @@ Admin.init(
   }
 );
 
-module.exports = Admin;
+module.exports = User;
