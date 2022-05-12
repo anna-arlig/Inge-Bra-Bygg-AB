@@ -54,9 +54,16 @@ module.exports = {
     });
   },
 
-  getById: async (req, res) => {
-    const user = await User.findById(req.params.id);
-    res.json(user);
+  getById: async (req, res, next) => {
+    try{
+      const user = await User.findById(req.params.id);
+      if(!user){
+        throw new UserNotFound(req.params.id)
+      }
+      res.json(user);
+    }catch(error){
+      next(error)
+    }
   },
 
   me: async (req, res) => {
@@ -70,18 +77,35 @@ module.exports = {
     res.json({ users });
   },
 
-  update: async (req, res) => {
+  update: async (req, res, next) => {
     const { city, street, zipCode } = req.body;
-    await User.updateOne(
-      { _id: req.params.id },
-      { address: { city, street, zipCode } }
-    );
-    res.json({ message: "User updated" });
+    try{
+      const user = User.findById(req.params.id)
+      if(!user){
+        throw new UserNotFound(req.params.id)
+      }
+      await User.updateOne(
+        { _id: req.params.id },
+        { address: { city, street, zipCode } }
+      );
+      res.json({ message: "User updated" });
+
+    }catch(error){
+      next(error)
+    }
   },
 
-  delete: async (req, res) => {
-    const user = await User.findById(req.params.id);
-    await user.delete({ _id: user._id });
-    res.json({ message: "User deleted" });
+  delete: async (req, res, next) => {
+    try{
+      const user = await User.findById(req.params.id);
+      if(!user){
+        throw new UserNotFound(req.params.id)
+      }
+      await user.delete({ _id: user._id });
+      res.json({ message: "User deleted" });
+
+    }catch(error){
+      next(error)
+    }
   },
 };

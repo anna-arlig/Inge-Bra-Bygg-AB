@@ -17,7 +17,6 @@ module.exports = {
         { safe: true, upsert: true, new: true }
       );
       const sockets = await io.fetchSockets();
-      console.log("fetching sockets: ", sockets);
       for (const socket of sockets) {
         socket.emit("message", task);
       }

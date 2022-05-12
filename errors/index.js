@@ -86,6 +86,14 @@ class MessageNotFound extends CustomError {
   }
 }
 
+class WrongRole extends CustomError {
+  constructor(id, role) {
+    super();
+    this.message = `User with id ${id} is not ${role}`;
+    this.errorCode = 400;
+  }
+}
+
 module.exports = {
   CustomError,
   InvalidCredentials,
@@ -98,5 +106,6 @@ module.exports = {
   UserNotFound,
   InvalidFile,
   FileExists,
-  HackerAttempt
+  HackerAttempt,
+  WrongRole
 };
