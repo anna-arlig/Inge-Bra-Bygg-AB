@@ -1,9 +1,5 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../database/connection");
-<<<<<<< HEAD:models/User.js
-=======
-
->>>>>>> 712139a3d420618cdc0355b69d60d7ffd042de8d:models/Admin.js
 class User extends Model {
   static async register(user) {
     const { name, password, email } = user;
@@ -29,10 +25,6 @@ class User extends Model {
   static async deleteAccount(email, password) {}
   async updateCredentials(email, password) {}
 }
-<<<<<<< HEAD:models/User.js
-=======
-
->>>>>>> 712139a3d420618cdc0355b69d60d7ffd042de8d:models/Admin.js
 User.init(
   {
     _id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -44,7 +36,6 @@ User.init(
     zipCode: { type: DataTypes.STRING, allowNull: true },
     imgPath: { type: DataTypes.STRING, allowNull: true },
     role: {
-<<<<<<< HEAD:models/User.js
       type: DataTypes.ENUM,
       values: ["client", "admin", "worker", "project-leader"],
       defaultValue: "client",
@@ -57,13 +48,6 @@ User.init(
       type: DataTypes.ENUM,
       values: ["sms", "email", "call"],
     },
-=======
-      type: DataTypes.STRING,
-      enum: ["client", "worker", "admin"],
-      defaultValue: "client",
-      allowNull: false,
-    },
->>>>>>> 712139a3d420618cdc0355b69d60d7ffd042de8d:models/Admin.js
   },
   {
     sequelize,
