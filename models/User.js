@@ -1,10 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
-const { UserNotFound, InvalidCredentials } = require("../errors");
 const sequelize = require("../database/connection");
-const bcrypt = require("bcryptjs");
-const SALT_WORK_FACTOR = 10;
-
-class Admin extends Model {
+class User extends Model {
   static async register(user) {
     const { name, password, email } = user;
     try {
@@ -29,9 +25,9 @@ class Admin extends Model {
   static async deleteAccount(email, password) {}
   async updateCredentials(email, password) {}
 }
-
-Admin.init(
+User.init(
   {
+    _id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     password: { type: DataTypes.STRING, allowNull: false },
@@ -39,10 +35,23 @@ Admin.init(
     street: { type: DataTypes.STRING, allowNull: true },
     zipCode: { type: DataTypes.STRING, allowNull: true },
     imgPath: { type: DataTypes.STRING, allowNull: true },
+    role: {
+      type: DataTypes.ENUM,
+      values: ["client", "admin", "worker", "project-leader"],
+      defaultValue: "client",
+      allowNull: false,
+    },
+    countryCode: { type: DataTypes.INTEGER, allowNull: true },
+    mobile: { type: DataTypes.INTEGER, allowNull: true },
+    workPhone: { type: DataTypes.INTEGER, allowNull: true },
+    contactPreference: {
+      type: DataTypes.ENUM,
+      values: ["sms", "email", "call"],
+    },
   },
   {
     sequelize,
-    modelName: "Admin",
+    modelName: "User",
     hooks: {
       beforeCreate(instance, options) {
         if (instance.password) {
@@ -53,4 +62,4 @@ Admin.init(
   }
 );
 
-module.exports = Admin;
+module.exports = User;
