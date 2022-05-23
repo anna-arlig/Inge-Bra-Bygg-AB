@@ -37,7 +37,12 @@ User.init(
     imgPath: { type: DataTypes.STRING, allowNull: true },
     role: {
       type: DataTypes.ENUM,
-      values: ["client", "admin", "worker", "project-leader"],
+      //manager: Creates projects
+      //supervisor: have access to all projects and tasks and messages
+      //project-leader: admin for a project, can create tasks with workers
+      //worker: can send messages
+      //client: can send messages
+      values: ["client", "supervisor", "worker", "project-leader", "manager"],
       defaultValue: "client",
       allowNull: false,
     },
