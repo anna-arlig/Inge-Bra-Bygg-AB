@@ -11,9 +11,6 @@ Project.belongsTo(User, { foreignKey: "clientId" });
 User.hasMany(Task, { foreignKey: { name: "workerId", allowNull: false } });
 User.hasMany(Task, { foreignKey: { name: "clientId", allowNull: false } });
 
-// Flavor.hasMany(User, { foreignKey: "vote" });
-// User.belongsTo(Flavor, { foreignKey: "vote", targetKey: "id" });
-
 Worker_Task.belongsToMany(Worker, { foreignKey: "worker_Id", targetKey: "id" });
 Worker_Task.hasMany(Task);
 Task.belongsTo(Client);
@@ -24,11 +21,3 @@ Task.hasMany(Message);
 Message.hasOne(Worker);
 Message.hasOne(Client);
 Message.hasOne(Admin);
-
-Worker.hasMany(Message);
-Worker.hasMany(Task);
-
-Client.hasMany(Task);
-Client.hasMany(Message);
-
-Admin.hasMany(Message);
